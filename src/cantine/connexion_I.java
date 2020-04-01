@@ -78,7 +78,7 @@ public class connexion_I {
 				String mdp = champ_mdp.getText();
 				bd connect = new bd();
 				try {
-					utilisateur ut = connect.connexion(mail, mdp);
+					Utilisateur ut = connect.connexion(mail, mdp);
 					if (ut.getNom()==null) {
 						System.out.println("identifiant incorrecte");
 					}
@@ -101,3 +101,4 @@ public class connexion_I {
 
 	}
 }
+

@@ -3,7 +3,12 @@ package cantine;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import java.sql.SQLException;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
@@ -12,9 +17,9 @@ import org.eclipse.swt.widgets.Combo;
 public class new_eleve_I {
 
 	protected Shell shell;
-	private Text text;
-	private Text text_2;
-	private Text text_3;
+	private Text champ_nom;
+	private Text champ_prenom;
+	private Text champ_classe;
 	private String[] age_combo = new String [101];
 
 	/**
@@ -35,7 +40,7 @@ public class new_eleve_I {
 	 */
 	public void open() {
 		Display display = Display.getDefault();
-		createContents();
+		createContents(display);
 		shell.open();
 		shell.layout();
 		while (!shell.isDisposed()) {
@@ -48,23 +53,23 @@ public class new_eleve_I {
 	/**
 	 * Create contents of the window.
 	 */
-	protected void createContents() {
+	protected void createContents(Display display) {
 		shell = new Shell();
 		shell.setSize(646, 457);
 		shell.setText("SWT Application");
 		
-		text = new Text(shell, SWT.BORDER);
-		text.setBounds(64, 88, 168, 31);
+		champ_nom = new Text(shell, SWT.BORDER);
+		champ_nom.setBounds(64, 88, 168, 31);
 		
-		Button btnNewButton = new Button(shell, SWT.NONE);
-		btnNewButton.setBounds(384, 279, 105, 35);
-		btnNewButton.setText("New Button");
+		Button boutton_valider = new Button(shell, SWT.NONE);
+		boutton_valider.setBounds(221, 206, 105, 35);
+		boutton_valider.setText("Valider");
 		
-		text_2 = new Text(shell, SWT.BORDER);
-		text_2.setBounds(286, 88, 168, 31);
+		champ_prenom = new Text(shell, SWT.BORDER);
+		champ_prenom.setBounds(286, 88, 168, 31);
 		
-		text_3 = new Text(shell, SWT.BORDER);
-		text_3.setBounds(286, 153, 168, 31);
+		champ_classe = new Text(shell, SWT.BORDER);
+		champ_classe.setBounds(286, 153, 168, 31);
 		
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBounds(286, 57, 81, 25);
@@ -84,9 +89,28 @@ public class new_eleve_I {
 		for (int i = 0; i <= 100; i++) {
 			age_combo[i] = String.valueOf(i);
 		}
-		Combo combo = new Combo(shell, SWT.NONE);
-		combo.setItems(age_combo);
-		combo.setBounds(64, 153, 104, 33);
+		Combo champ_age = new Combo(shell, SWT.NONE);
+		champ_age.setItems(age_combo);
+		champ_age.setBounds(64, 153, 104, 33);
+		boutton_valider.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String nom = champ_nom.getText();
+				String prenom = champ_prenom.getText();
+				String classe = champ_classe.getText();
+				int age = Integer.parseInt(champ_age.getText());
+				bd connect = new bd();
+				try {
+					System.out.println(connect.newUsers(nom, prenom, age, null, null, false, classe));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				display.close();
+				eleves_I new_page = new eleves_I();
+				new_page.main(null);
+			}
+		});
 
 	}
 }

@@ -11,9 +11,13 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
+
+import java.sql.SQLException;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import cantine.*;
 
 public class eleves_I {
 
@@ -35,8 +39,9 @@ public class eleves_I {
 
 	/**
 	 * Open the window.
+	 * @throws SQLException 
 	 */
-	public void open() {
+	public void open() throws SQLException {
 		Display display = Display.getDefault();
 		createContents();
 		shell.open();
@@ -50,8 +55,9 @@ public class eleves_I {
 
 	/**
 	 * Create contents of the window.
+	 * @throws SQLException 
 	 */
-	protected void createContents() {
+	protected void createContents() throws SQLException {
 		shell = new Shell();
 		shell.setSize(790, 616);
 		shell.setText("SWT Application");
@@ -76,9 +82,28 @@ public class eleves_I {
 		TableColumn tblclmnAge = new TableColumn(eleves_table, SWT.NONE);
 		tblclmnAge.setWidth(117);
 		tblclmnAge.setText("Age");
+		bd bd = new bd();
+		Utilisateur[] users = bd.getUsers();
+		System.out.println(users);
+		TableItem[] tab = new TableItem[users.length];
 		
-		TableItem eleve_item = new TableItem(eleves_table, SWT.NONE);
-		eleve_item.setText(new String[] {"classe1","nom1","prenom1","age1"});
+		TableItem eleve_item1 = new TableItem(eleves_table, SWT.NONE);
+		eleve_item1.setText(new String[] {"classe1","nom1","prenom1","age1"});
+		
+		for(int i = 0; i<users.length;i++) {
+			Utilisateur use = users[i];
+			
+			TableItem eleve_item = new TableItem(eleves_table, SWT.NONE);
+			String[] text = new String[4];
+			text[0] = use.getClasse();
+			text[1] = use.getNom();
+			text[2] = use.getPrenom();
+			text[3] = String.valueOf(use.getAge());
+			eleve_item.setText(text);
+			tab[i] = eleve_item;
+			
+		}
+		
 		
 		Button ajout_boutton = new Button(shell, SWT.NONE);
 		ajout_boutton.addSelectionListener(new SelectionAdapter() {
